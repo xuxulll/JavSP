@@ -46,7 +46,13 @@ jobs:
           python -m pip install pyinstaller
 
       - name: Build with PyInstaller for windows
-        run: bash 'make.bash'
+        run: |
+          echo "JavSP version: "
+          python ./make/gen_ver_hook.py ver_hook.py
+          pyinstaller --clean ./make/linux.spec
+          rm ver_hook.py
+          rm dist/config.ini 2> /dev/null
+          cp -r ./data ./dist
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v1
